@@ -6,6 +6,8 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.lang.reflect.Array;
+
 public class DriveSubsystem extends SubsystemBase {
 
     private final MecanumDrive drive;
@@ -15,52 +17,25 @@ public class DriveSubsystem extends SubsystemBase {
     private final MotorEx frontLeft;
 
 
-    public DriveSubsystem(MotorEx backRight, MotorEx backLeft, MotorEx frontRight, MotorEx frontLeft) {
-        this.backRight = backRight;
-        this.backLeft = backLeft;
-        this.frontRight = frontRight;
-        this.frontLeft = frontLeft;
-        drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
-    }
-//current correct config:
-    //port 0 = leftBack
-    //port 1 = leftFront
-    //port 2 = rightFront
-    //port 3 = rightBack
 
-    public DriveSubsystem(HardwareMap hw, String backRight, String backLeft, String frontRight, String frontLeft) {
+
+
+    public DriveSubsystem(HardwareMap hw, String backRight, String backLeft, String frontRight, String frontLeft, boolean[] reverse) {
         this.backRight = new MotorEx(hw, backRight);
         this.backLeft = new MotorEx(hw, backLeft);
         this.frontRight = new MotorEx(hw, frontRight);
         this.frontLeft = new MotorEx(hw, frontLeft);
 
-        //correct:
-        //this.backLeft = new MotorEx(hw, backRight);
-        //this.backRight = new MotorEx(hw, backLeft);
-        //this.frontLeft = new MotorEx(hw, frontRight);
-        //this.frontRight = new MotorEx(hw, frontLeft);
-        //or
-
-        //this.backLeft = new MotorEx(hw, backLeft);
-        //this.backRight = new MotorEx(hw, frontRight);
-        //this.frontRight = new MotorEx(hw, frontLeft);
-        //this.frontLeft = new MotorEx(hw, backRight);
-
-        //adjust as needed
-        this.backLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.backRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //this.frontLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.frontRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        if (reverse[0]){this.backRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);}
+        if (reverse[1]){this.backLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);}
+        if (reverse[2]){this.frontRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);}
+        if (reverse[3]){this.frontLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);}
 
         drive = new MecanumDrive(this.frontLeft, this.frontRight, this.backLeft, this.backRight);
 
     }
 
-    //public void drive(double strafe, double forward, double turn) {
-      //  drive.driveRobotCentric(forward, strafe, turn);
-    //}
-    //possible fix:
+
     public void drive(double strafe, double forward, double turn) {
         drive.driveRobotCentric(strafe, forward, turn);
     }
