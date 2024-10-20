@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.teleop.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.DriveSubsystem;
-
+import org.firstinspires.ftc.teamcode.teleop.utils;
 @TeleOp(name="Just Drive TeleOp", group = "Apex Robotics 3916")
 public class JustDrive extends CommandOpMode {
     private GamepadEx driver, codriver;
@@ -27,6 +27,10 @@ public class JustDrive extends CommandOpMode {
         );
         register(drive);
         drive.setDefaultCommand(driveCommand);
+        utils utils = new utils();
+        utils.bind(hardwareMap, this, driver, GamepadKeys.Button.LEFT_BUMPER, GamepadKeys.Button.RIGHT_BUMPER, "motor", "test1");
+
+
 
     }
 }
