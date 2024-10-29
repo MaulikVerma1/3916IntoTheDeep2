@@ -13,6 +13,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final MotorEx backLeft;
     private final MotorEx frontRight;
     private final MotorEx frontLeft;
+    private boolean[] reversed;
 
 
     public DriveSubsystem(MotorEx backRight, MotorEx backLeft, MotorEx frontRight, MotorEx frontLeft) {
@@ -28,12 +29,12 @@ public class DriveSubsystem extends SubsystemBase {
     //port 2 = rightFront
     //port 3 = rightBack
 
-    public DriveSubsystem(HardwareMap hw, String backRight, String backLeft, String frontRight, String frontLeft) {
+    public DriveSubsystem(HardwareMap hw, String backRight, String backLeft, String frontRight, String frontLeft, boolean[] reversed) {
         this.backRight = new MotorEx(hw, backRight);
         this.backLeft = new MotorEx(hw, backLeft);
         this.frontRight = new MotorEx(hw, frontRight);
         this.frontLeft = new MotorEx(hw, frontLeft);
-
+        this.reversed = reversed;
         //correct:
         //this.backLeft = new MotorEx(hw, backRight);
         //this.backRight = new MotorEx(hw, backLeft);
@@ -47,10 +48,19 @@ public class DriveSubsystem extends SubsystemBase {
         //this.frontLeft = new MotorEx(hw, backRight);
 
         //adjust as needed
-        this.backLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.backRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //this.frontLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.frontRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (reversed[1]) {
+            this.backLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        if (reversed[0]) {
+           this.backRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        if (reversed[3]) {
+            this.frontLeft.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        if (reversed[2]) {
+            this.frontRight.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
 
 
         drive = new MecanumDrive(this.frontLeft, this.frontRight, this.backLeft, this.backRight);

@@ -18,7 +18,7 @@ public class DefaultDrive extends CommandBase {
     private final BooleanSupplier leftBumper;
     private final BooleanSupplier rightBumper;
 
-    public DefaultDrive(DriveSubsystem subsystem, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn, BooleanSupplier left, BooleanSupplier right) {
+    public DefaultDrive(DriveSubsystem subsystem, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn, BooleanSupplier left, BooleanSupplier right ) {
         drive = subsystem;
         strafeSpeed = strafe;
         forwardSpeed = forward;

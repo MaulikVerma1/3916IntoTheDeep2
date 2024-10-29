@@ -1,22 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.teleop.commands.ClawCommand;
 import org.firstinspires.ftc.teamcode.teleop.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.teleop.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.teleop.commands.LauncherCommand;
 import org.firstinspires.ftc.teamcode.teleop.commands.SimpleSlide;
-import org.firstinspires.ftc.teamcode.teleop.commands.SlideCommand;
-import org.firstinspires.ftc.teamcode.teleop.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.LauncherSubsystem;
@@ -43,12 +36,10 @@ public class JustDrive extends CommandOpMode {
         codriver = new GamepadEx(gamepad2);
         //normal config
 
-        drive = new DriveSubsystem(hardwareMap, "leftBack", "rightBack", "leftFront", "rightFront");
-        //switch right motors if it doesn't work
+        drive = new DriveSubsystem(hardwareMap, "leftBack", "rightBack", "leftFront", "rightFront", new boolean[] {true, false, false, true});
+
         driveCommand = new DefaultDrive(drive, driver::getLeftX, driver::getLeftY, driver::getRightX,
                () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),  () -> driver.getButton(GamepadKeys.Button.RIGHT_BUMPER));
-        //driveCommand = new DefaultDrive(drive, driver::getRightX, driver::getLeftY, driver::getLeftX,
-          //      () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),  () -> driver.getButton(GamepadKeys.Button.RIGHT_BUMPER));
 
         register(drive);
         drive.setDefaultCommand(driveCommand);
