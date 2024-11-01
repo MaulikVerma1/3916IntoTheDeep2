@@ -36,35 +36,35 @@ public class ClawSubsystem extends SubsystemBase {
 
     public void safeclose(double target) {
         final double targetPosition = target;
-        final double adjustmentStep = 0.01; // Amount to adjust the position
-        final double tolerance = 0.01; // Acceptable range from target position
+        final double adjustmentStep = 0.01;
+        final double tolerance = 0.01;
+        final int MAX_ITERATIONS = 500; // Prevent infinite loop
 
-        new Thread(() -> {
-            // Loop until the claw is close enough to the desired position
-            while (Math.abs(servo.getPosition() - targetPosition) > tolerance) {
-                // Check the current position of the claw
+        Thread servo_thread = new Thread(() -> {
+            int iterations = 0;
+            while (Math.abs(servo.getPosition() - targetPosition) > tolerance &&
+                    iterations < MAX_ITERATIONS) {
                 double currentPosition = servo.getPosition();
 
-                // Calculate the direction and apply less force
                 if (currentPosition < targetPosition) {
-                    // Move towards the target position slowly
                     servo.setPosition(Math.min(currentPosition + adjustmentStep, targetPosition));
                 } else {
-                    // Move towards the target position slowly
                     servo.setPosition(Math.max(currentPosition - adjustmentStep, targetPosition));
                 }
 
-                // Sleep for a short period to avoid overwhelming the servo
                 try {
-                    sleep(50); // Adjust the sleep time as necessary
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
-                    // Handle the interruption
                     Thread.currentThread().interrupt();
+                    break;
                 }
+
+                iterations++;
             }
 
-            // Final adjustment to ensure it reaches the target position
             servo.setPosition(targetPosition);
-        }).start();
+        });
+
+        servo_thread.start();
     }
 }

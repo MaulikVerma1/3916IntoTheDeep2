@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.teleop.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.LauncherSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.SlideSubsystem;
+import org.firstinspires.ftc.teamcode.teleop.subsystems.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.teleop.commands.ClawITD;
 
 @TeleOp(name="Just Drive TeleOp", group = "Apex Robotics 3916")
 public class JustDrive extends CommandOpMode {
@@ -21,15 +23,8 @@ public class JustDrive extends CommandOpMode {
     private GamepadEx driver, codriver;
     private DriveSubsystem drive;
     private DefaultDrive driveCommand;
-
-    private IntakeSubsystem intake;
-
-    private IntakeCommand intakecommand;
-
-    private SlideSubsystem slide;
-    private SimpleSlide up;
-    private SimpleSlide down;
-    private SimpleSlide stop;
+    private ClawITD clawCommand;
+    private ClawSubsystem claw;
     @Override
     public void initialize() {
         driver = new GamepadEx(gamepad1);
@@ -44,37 +39,16 @@ public class JustDrive extends CommandOpMode {
         register(drive);
         drive.setDefaultCommand(driveCommand);
 
-        //intake = new IntakeSubsystem(new MotorEx(hardwareMap, "inmotor"));
-        intake = new IntakeSubsystem(hardwareMap, "inmotor", "right");
-        intakecommand = new IntakeCommand(intake, () -> driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
-        register(intake);
-        intake.setDefaultCommand(intakecommand);
+        claw = new ClawSubsystem(hardwareMap, "claw", 0, 90);
+        clawCommand = new ClawITD(claw, () -> driver.getButton(GamepadKeys.Button.A));
+        register(claw);
+        claw.setDefaultCommand(clawCommand);
 
-        //slide = new SlideSubsystem(hardwareMap, "left", "right");
-
-        //up = new SimpleSlide(slide, () -> codriver.getLeftY() * -0.5);
+        driver.getGamepadButton(GamepadKeys.Button.A).whenPressed(clawCommand);
+        driver.getGamepadButton(GamepadKeys.Button.A).whenReleased(clawCommand);
 
 
-        //register(slide);
 
-        //slide.setDefaultCommand(up);
 
-        LauncherSubsystem launcher = new LauncherSubsystem(hardwareMap, "launcher", 0, 180);
-        LauncherCommand launcherCommand = new LauncherCommand(launcher);
-
-        new GamepadButton(driver, GamepadKeys.Button.A).whenPressed(launcherCommand);
-        register(launcher);
-
-        LauncherSubsystem launcher2 = new LauncherSubsystem(hardwareMap, "claw", 0, 180);
-        LauncherCommand launcherCommand2 = new LauncherCommand(launcher2);
-
-        new GamepadButton(driver, GamepadKeys.Button.B).whenPressed(launcherCommand2);
-        register(launcher2);
-
-        //ClawSubsystem claw = new ClawSubsystem(hardwareMap, "claw", 0, 180);
-        //ClawCommand clawCommand = new ClawCommand(claw);
-        //register(claw);
-
-        //new GamepadButton(driver, GamepadKeys.Button.B).whenPressed(clawCommand);
     }
 }

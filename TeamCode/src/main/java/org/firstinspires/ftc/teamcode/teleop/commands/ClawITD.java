@@ -25,6 +25,8 @@ public class ClawITD extends CommandBase {
             if (!currentState) {
                 clawSubsystem.safeclose((TeleOpConfig.CLAW_CLOSE_DEGREES / (2 * Math.PI)));
             }
+        }else {
+            clawSubsystem.open();
         }
     }
 
