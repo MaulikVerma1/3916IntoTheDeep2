@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 * @author Jude Naramor
  * @author Vikram K
  * */
-public class SlideSubsystem extends SubsystemBase {
+public class wSlideSubsystem extends SubsystemBase {
     private final MotorEx frontMotor;
     private final MotorEx backMotor;
     public SlideSubsystem(HardwareMap hw, String frontMotor, String backMotor) {
