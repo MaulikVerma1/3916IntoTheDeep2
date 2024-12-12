@@ -7,11 +7,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.teleop.commands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.utils;
+import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
+import org.firstinspires.ftc.teamcode.teleop.commands.PixelCollectionCommand;
 @TeleOp(name="Just Drive TeleOp", group = "Apex Robotics 3916")
 public class JustDrive extends CommandOpMode {
     private GamepadEx driver, codriver;
     private DriveSubsystem drive;
     private DefaultDrive driveCommand;
+    private IntakeArmSubsystem intakeArm;
+    private PixelCollectionCommand pixelCollectionCommand;
     @Override
     public void initialize() {
         //default driving
@@ -27,10 +31,13 @@ public class JustDrive extends CommandOpMode {
         );
         register(drive);
         drive.setDefaultCommand(driveCommand);
-        utils utils = new utils();
-        utils.bind(hardwareMap, this, driver, GamepadKeys.Button.LEFT_BUMPER, GamepadKeys.Button.RIGHT_BUMPER, "motor", "test1");
 
+        intakeArm = new IntakeArmSubsystem(hardwareMap);
+        register(intakeArm);
 
+        pixelCollectionCommand = new PixelCollectionCommand(intakeArm);
 
+        codriver.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(pixelCollectionCommand);
     }
 }
