@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
 public class PrepareCollectionCommand extends SequentialCommandGroup {
     public PrepareCollectionCommand(IntakeArmSubsystem arm) {
         addCommands(
-                new ExtendLinkageCommand(arm),
-                new MoveIntakeDownCommand(arm)
+                new ExtendLinkageCommand(arm)
+                //new MoveIntakeDownCommand(arm)
         );
     }
 }

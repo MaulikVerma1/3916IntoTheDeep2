@@ -45,7 +45,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double[] getMotorVelocities(){
-        return new double[]{backRight.encoder.getCorrectedVelocity(), backLeft.encoder.getCorrectedVelocity(), frontRight.encoder.getCorrectedVelocity(), frontLeft.encoder.getCorrectedVelocity()};
+        return new double[]{
+                backRight.encoder.getCorrectedVelocity(),
+                backLeft.encoder.getCorrectedVelocity(),
+                frontRight.encoder.getCorrectedVelocity(),
+                frontLeft.encoder.getCorrectedVelocity()};
     }
 
 }

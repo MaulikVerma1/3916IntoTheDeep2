@@ -18,17 +18,16 @@ public class IntakeColorCommand extends CommandBase {
     public void execute() {
         if (trigger.getAsDouble() > 0.1) {  // Trigger threshold
             if (intakeColor.isYellow()) {
-                intakeColor.reverse();
+           //     intakeColor.reverse();
             } else {
-                intakeColor.intake();
+            //    intakeColor.intake();
             }
         } else {
-            intakeColor.stop();
+            //intakeColor.stop();
         }
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        intakeColor.stop();
+   // @Override
+    //public void end(boolean interrupted) {
+      //  intakeColor.stop();
     }
-}

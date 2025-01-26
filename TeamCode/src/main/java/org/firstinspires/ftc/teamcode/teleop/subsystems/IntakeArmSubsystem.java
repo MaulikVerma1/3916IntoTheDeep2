@@ -11,36 +11,36 @@
         private final ServoEx rightLinkage;
         private final ServoEx leftIntakeFlip;
         private final ServoEx rightIntakeFlip;
-        private final ServoEx clawPivot;
-        private final ServoEx clawGrip;
+        //private final ServoEx clawPivot;
+        //private final ServoEx clawGrip;
 
         private static final double POSITION_TOLERANCE = 0.05;
 
         // Define servo positions
         private static final double LINKAGE_RETRACTED = 0.0;
-        private static final double LINKAGE_EXTENDED = 1.0;
+        private static final double LINKAGE_EXTENDED = 0.0;
 
         private static final double INTAKE_UP = 0.0;
-        private static final double INTAKE_DOWN = 1.0;
+        private static final double INTAKE_DOWN = 180.0;
 
         private static final double CLAW_PIVOT_UP = 0.0;
-        private static final double CLAW_PIVOT_DOWN = 0.8;
+        private static final double CLAW_PIVOT_DOWN = 90;
 
-        private static final double CLAW_OPEN = 0.7;
+        private static final double CLAW_OPEN = 40;
         private static final double CLAW_CLOSED = 0.0;
 
         public IntakeArmSubsystem(HardwareMap hw) {
-            leftLinkage = new SimpleServo(hw, "left_linkage", 0, 180, AngleUnit.DEGREES);
-            rightLinkage = new SimpleServo(hw, "right_linkage", 0, 180, AngleUnit.DEGREES);
-            leftIntakeFlip = new SimpleServo(hw, "left_intake_flip", 0, 180, AngleUnit.DEGREES);
-            rightIntakeFlip = new SimpleServo(hw, "right_intake_flip", 0, 180, AngleUnit.DEGREES);
-            clawPivot = new SimpleServo(hw, "claw_pivot", 0, 180, AngleUnit.DEGREES);
-            clawGrip = new SimpleServo(hw, "claw_grip", 0, 180, AngleUnit.DEGREES);
+            leftLinkage = new SimpleServo(hw, "linkage.L", -180, 180, AngleUnit.DEGREES);
+            rightLinkage = new SimpleServo(hw, "linkage.R", -180, 180, AngleUnit.DEGREES);
+            leftIntakeFlip = new SimpleServo(hw, "flip.L", -180, 180, AngleUnit.DEGREES);
+            rightIntakeFlip = new SimpleServo(hw, "flip.R", -180, 180, AngleUnit.DEGREES);
+            //clawPivot = new SimpleServo(hw, "claw_pivot", 0, 180, AngleUnit.DEGREES);
+            //clawGrip = new SimpleServo(hw, "claw_grip", 0, 180, AngleUnit.DEGREES);
 
-            retractLinkage();
-            moveIntakeUp();
-            moveClawUp();
-            openClaw();
+            //retractLinkage();
+            //moveIntakeUp();
+            //moveClawUp();
+            //openClaw();
         }
 
         // Linkage controls
@@ -50,7 +50,7 @@
         }
 
         public void retractLinkage() {
-            leftLinkage.turnToAngle(LINKAGE_RETRACTED);
+            leftLinkage.turnToAngle(-LINKAGE_RETRACTED);
             rightLinkage.turnToAngle(LINKAGE_RETRACTED);
         }
 
@@ -66,12 +66,12 @@
 
         // Intake flip controls
         public void moveIntakeDown() {
-            leftIntakeFlip.turnToAngle(INTAKE_DOWN);
+            leftIntakeFlip.turnToAngle(-INTAKE_DOWN);
             rightIntakeFlip.turnToAngle(INTAKE_DOWN);
         }
 
         public void moveIntakeUp() {
-            leftIntakeFlip.turnToAngle(INTAKE_UP);
+            leftIntakeFlip.turnToAngle(-INTAKE_UP);
             rightIntakeFlip.turnToAngle(INTAKE_UP);
         }
 
@@ -87,26 +87,27 @@
 
         // Claw controls
         public void moveClawDown() {
-            clawPivot.turnToAngle(CLAW_PIVOT_DOWN);
+            //clawPivot.turnToAngle(CLAW_PIVOT_DOWN);
         }
 
         public void moveClawUp() {
-            clawPivot.turnToAngle(CLAW_PIVOT_UP);
+            //clawPivot.turnToAngle(CLAW_PIVOT_UP);
         }
 
         public void closeClaw() {
-            clawGrip.turnToAngle(CLAW_CLOSED);
+            //clawGrip.turnToAngle(CLAW_CLOSED);
         }
 
         public void openClaw() {
-            clawGrip.turnToAngle(CLAW_OPEN);
+            //clawGrip.turnToAngle(CLAW_OPEN);
         }
 
-        public boolean isClawDown() {
-            return Math.abs(clawPivot.getPosition() - CLAW_PIVOT_DOWN) < POSITION_TOLERANCE;
-        }
+        //public boolean isClawDown() {
+            //return Math.abs(clawPivot.getPosition() - CLAW_PIVOT_DOWN) < POSITION_TOLERANCE;
 
-        public boolean isClawClosed() {
-            return Math.abs(clawGrip.getPosition() - CLAW_CLOSED) < POSITION_TOLERANCE;
-        }
+        //}
+
+       // public boolean isClawClosed() {
+            //return Math.abs(clawGrip.getPosition() - CLAW_CLOSED) < POSITION_TOLERANCE;
+        //}
     }

@@ -94,10 +94,10 @@ class MoveClawDownCommand extends CommandBase {
         arm.moveClawDown();
     }
 
-    @Override
-    public boolean isFinished() {
-        return arm.isClawDown();
-    }
+    //@Override
+    //public boolean isFinished() {
+      //  return arm.isClawDown();
+    //}
 }
 
 class GrabPixelCommand extends CommandBase {
@@ -113,30 +113,31 @@ class GrabPixelCommand extends CommandBase {
         arm.closeClaw();
     }
 
-    @Override
-    public boolean isFinished() {
-        return arm.isClawClosed();
-    }
-}
+    //@Override
+    //public boolean isFinished() {
+    //      return arm.isClawClosed();
+    //}
+//}
 
-class WaitForPixelCommand extends CommandBase {
-    private final IntakeColorSubsystem intake;
-    private boolean hasPixel = false;
+    class WaitForPixelCommand extends CommandBase {
+        private final IntakeColorSubsystem intake;
+        private boolean hasPixel = false;
 
-    public WaitForPixelCommand(IntakeColorSubsystem intake) {
-        this.intake = intake;
-        addRequirements(intake);
-    }
-
-    @Override
-    public void execute() {
-        if (!intake.isYellow()) {
-            hasPixel = true;
+        public WaitForPixelCommand(IntakeColorSubsystem intake) {
+            this.intake = intake;
+            addRequirements(intake);
         }
-    }
 
-    @Override
-    public boolean isFinished() {
-        return hasPixel;
+        @Override
+        public void execute() {
+            if (!intake.isYellow()) {
+                hasPixel = true;
+            }
+        }
+
+        @Override
+        public boolean isFinished() {
+            return hasPixel;
+        }
     }
 }

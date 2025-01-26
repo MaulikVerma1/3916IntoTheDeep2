@@ -42,9 +42,9 @@ public class JustDrive extends CommandOpMode {
 
         // Initialize intake arm and color subsystems
         intakeArm = new IntakeArmSubsystem(hardwareMap);
-        intakeColor = new IntakeColorSubsystem(hardwareMap);
+        //intakeColor = new IntakeColorSubsystem(hardwareMap);
         register(intakeArm);
-        register(intakeColor);
+        //register(intakeColor);
 
         // Create prepare collection command (extends linkage and flips down)
         PrepareCollectionCommand prepareCollection = new PrepareCollectionCommand(intakeArm);
@@ -57,8 +57,8 @@ public class JustDrive extends CommandOpMode {
                 .whenPressed(completeCollection);
 
         // Bind intake control to right trigger
-        intakeColorCommand = new IntakeColorCommand(intakeColor,
-                () -> codriver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
-        intakeColor.setDefaultCommand(intakeColorCommand);
+        //intakeColorCommand = new IntakeColorCommand(intakeColor,
+          //      () -> codriver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
+        //intakeColor.setDefaultCommand(intakeColorCommand);
     }
 }
