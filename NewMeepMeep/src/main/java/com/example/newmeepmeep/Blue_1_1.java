@@ -2,10 +2,10 @@ package com.example.newmeepmeep;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.noahbres.meepmeep.MeepMeep;
-import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
-import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+//import com.noahbres.meepmeep.MeepMeep;
+//import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+//import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+//import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 /**
  * @author Anna Lynch
@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
 // Path for center radomization
+
+    /*
 @Autonomous(group = "drive", name="Blue_1_1")
 public class Blue_1_1 {
     public static void main(String[] args) {
@@ -45,3 +47,5 @@ public class Blue_1_1 {
                 .start();
     }
 }
+
+*/
