@@ -25,18 +25,19 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_LINKAGE_EXTENDED = 1.0;
 
     // Swapped UP/DOWN positions to reverse direction
-    private static final double LEFT_INTAKE_UP = 0.1;    // Was 0.1
-    private static final double LEFT_INTAKE_DOWN = 0.7;  // Was 0.7
+    private static final double LEFT_INTAKE_UP = 0.5;    // Was 0.1   - complete command
+    private static final double LEFT_INTAKE_DOWN = 0.1;  // Was 0.1   - prepare command
 
-    private static final double RIGHT_INTAKE_UP = 0.9;   // Was 0.9
-    private static final double RIGHT_INTAKE_DOWN = 0.3; // Was 0.3
+
+    private static final double RIGHT_INTAKE_UP = 0.5;   // Was 0.9   - complete command
+    private static final double RIGHT_INTAKE_DOWN = 0.9; // Was 0.3   - prepare command
 
     // Claw pivot positions (mirrored servos)
-    private static final double LEFT_CLAW_PIVOT_UP = 0.2;
-    private static final double LEFT_CLAW_PIVOT_DOWN = 0.8;
+    private static final double LEFT_CLAW_PIVOT_UP = 0.8;
+    private static final double LEFT_CLAW_PIVOT_DOWN = 0.2;
 
-    private static final double RIGHT_CLAW_PIVOT_UP = 0.8;
-    private static final double RIGHT_CLAW_PIVOT_DOWN = 0.2;
+    private static final double RIGHT_CLAW_PIVOT_UP = 0.2;
+    private static final double RIGHT_CLAW_PIVOT_DOWN = 0.8;
 
     // Claw grip position
     private static final double CLAW_GRIP_OPEN = 0.4;
@@ -49,7 +50,10 @@ public class IntakeArmSubsystem extends SubsystemBase {
         rightIntakeFlip = new SimpleServo(hw, "flip.R", -180, 180, AngleUnit.DEGREES);
         leftClawPivot = new SimpleServo(hw, "pivot.L", 0, 180, AngleUnit.DEGREES);
         rightClawPivot = new SimpleServo(hw, "pivot.R", 0, 180, AngleUnit.DEGREES);
-        clawGrip = new SimpleServo(hw, "claw", 0, 180, AngleUnit.DEGREES);
+        clawGrip = new SimpleServo(hw, "claw_grip", 0, 180, AngleUnit.DEGREES);
+
+        leftIntakeFlip.setInverted(true);
+        rightIntakeFlip.setInverted(true);
 
         // Initialize to starting position
         retractLinkage();

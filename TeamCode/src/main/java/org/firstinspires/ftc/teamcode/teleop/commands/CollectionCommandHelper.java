@@ -180,3 +180,42 @@ class WaitForPixelCommand extends CommandBase {
         return hasPixel;
     }
 }
+
+class CollectPixelCommand extends CommandBase {
+    private final IntakeColorSubsystem intake;
+    private boolean hasCheckedColor = false;
+    private static final long CHECK_DELAY_MS = 1000; // Time to wait before checking color
+    private long startTime;
+
+    public CollectPixelCommand(IntakeColorSubsystem intake) {
+        this.intake = intake;
+        addRequirements(intake);
+    }
+
+    @Override
+    public void initialize() {
+        intake.intake();  // Start intake motor
+        startTime = System.currentTimeMillis();
+        hasCheckedColor = false;
+    }
+
+    @Override
+    public void execute() {
+        if (!hasCheckedColor && (System.currentTimeMillis() - startTime) > CHECK_DELAY_MS) {
+//            if (!intake.isYellow()) {
+//                intake.reverse();  // Spit out non-yellow pixel
+//                hasCheckedColor = true;
+//            }
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return hasCheckedColor && (System.currentTimeMillis() - startTime) > (CHECK_DELAY_MS + 500);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        intake.stop();  // Stop the motor
+    }
+}
