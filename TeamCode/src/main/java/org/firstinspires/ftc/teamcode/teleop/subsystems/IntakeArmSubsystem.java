@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx leftLinkage;
@@ -14,6 +15,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx leftClawPivot;
     private final ServoEx rightClawPivot;
     private final ServoEx clawGrip;
+    private final Telemetry telemetry;
 
     private static final double POSITION_TOLERANCE = 0.05;
 
@@ -25,12 +27,12 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_LINKAGE_EXTENDED = 1.0;
 
     // Swapped UP/DOWN positions to reverse direction
-    private static final double LEFT_INTAKE_UP = 0.5;    // Was 0.1   - complete command
-    private static final double LEFT_INTAKE_DOWN = 0.1;  // Was 0.1   - prepare command
+    private static final double LEFT_INTAKE_UP = 0.3;    // Was 0.1   - complete command
+    private static final double LEFT_INTAKE_DOWN = 0.222;  // Was 0.1   - prepare command
 
 
-    private static final double RIGHT_INTAKE_UP = 0.5;   // Was 0.9   - complete command
-    private static final double RIGHT_INTAKE_DOWN = 0.9; // Was 0.3   - prepare command
+    private static final double RIGHT_INTAKE_UP = 0.7;   // Was 0.9   - complete command
+    private static final double RIGHT_INTAKE_DOWN = 0.778; // Was 0.3   - prepare command
 
     // Claw pivot positions (mirrored servos)
     private static final double LEFT_CLAW_PIVOT_UP = 0.8;
@@ -43,7 +45,9 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double CLAW_GRIP_OPEN = 0.4;
     private static final double CLAW_GRIP_CLOSED = 0.0;
 
-    public IntakeArmSubsystem(HardwareMap hw) {
+    public IntakeArmSubsystem(HardwareMap hw, Telemetry telemetry) {
+
+        this.telemetry = telemetry;
         leftLinkage = new SimpleServo(hw, "linkage.L", -180, 180, AngleUnit.DEGREES);
         rightLinkage = new SimpleServo(hw, "linkage.R", -180, 180, AngleUnit.DEGREES);
         leftIntakeFlip = new SimpleServo(hw, "flip.L", -180, 180, AngleUnit.DEGREES);
@@ -59,6 +63,30 @@ public class IntakeArmSubsystem extends SubsystemBase {
         retractLinkage();
         //moveIntakeUp();
     }
+
+
+    @Override
+    public void periodic() {
+        // Intake flip positions
+        telemetry.addData("Left Intake Pos", "%.3f", leftIntakeFlip.getPosition());
+        telemetry.addData("Right Intake Pos", "%.3f", rightIntakeFlip.getPosition());
+        telemetry.addData("Target L/R", "UP: %.3f/%.3f, DOWN: %.3f/%.3f",
+                LEFT_INTAKE_UP, RIGHT_INTAKE_UP,
+                LEFT_INTAKE_DOWN, RIGHT_INTAKE_DOWN);
+
+        // Linkage positions
+        telemetry.addData("Left Linkage Pos", "%.3f", leftLinkage.getPosition());
+        telemetry.addData("Right Linkage Pos", "%.3f", rightLinkage.getPosition());
+
+        // Add a line to show current state
+        String state = "";
+        if (isIntakeUp()) state += "Intake UP ";
+        if (isIntakeDown()) state += "Intake DOWN ";
+        if (isLinkageExtended()) state += "Linkage EXTENDED ";
+        if (isLinkageRetracted()) state += "Linkage RETRACTED ";
+        telemetry.addData("State", state);
+    }
+
 
     // Linkage controls
     public void extendLinkage() {
