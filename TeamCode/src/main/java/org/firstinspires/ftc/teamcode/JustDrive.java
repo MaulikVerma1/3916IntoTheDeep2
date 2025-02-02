@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeColorSubsystem;
 import org.firstinspires.ftc.teamcode.teleop.commands.PrepareCollectionCommand;
 import org.firstinspires.ftc.teamcode.teleop.commands.CompleteCollectionCommand;
 import org.firstinspires.ftc.teamcode.teleop.commands.IntakeColorCommand;
+import com.arcrobotics.ftclib.command.RunCommand;  // Add this import
+
 
 @TeleOp(name="Just Drive TeleOp", group = "Apex Robotics 3916")
 public class JustDrive extends CommandOpMode {
@@ -50,6 +52,7 @@ public class JustDrive extends CommandOpMode {
         PrepareCollectionCommand prepareCollection = new PrepareCollectionCommand(intakeArm, intakeColor);
         codriver.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(prepareCollection);
+
 
         // Create complete collection command (flips up, retracts, claw sequence)
         CompleteCollectionCommand completeCollection = new CompleteCollectionCommand(intakeArm);

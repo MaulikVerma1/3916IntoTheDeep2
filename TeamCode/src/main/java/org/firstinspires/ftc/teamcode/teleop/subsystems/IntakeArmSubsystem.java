@@ -17,6 +17,9 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx clawGrip;
     private final Telemetry telemetry;
 
+
+
+
     private static final double POSITION_TOLERANCE = 0.05;
 
     // Linkage positions are good
@@ -27,12 +30,12 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_LINKAGE_EXTENDED = 1.0;
 
     // Swapped UP/DOWN positions to reverse direction
-    private static final double LEFT_INTAKE_UP = 0.3;    // Was 0.1   - complete command
-    private static final double LEFT_INTAKE_DOWN = 0.222;  // Was 0.1   - prepare command
+    private static final double LEFT_INTAKE_UP = 1;    // Was 0.1   - complete command
+    private static final double LEFT_INTAKE_DOWN = 0.2;  // Was 0.1   - prepare command
 
 
-    private static final double RIGHT_INTAKE_UP = 0.7;   // Was 0.9   - complete command
-    private static final double RIGHT_INTAKE_DOWN = 0.778; // Was 0.3   - prepare command
+    private static final double RIGHT_INTAKE_UP = 0.0;   // Was 0.9   - complete command
+    private static final double RIGHT_INTAKE_DOWN = 0.8; // Was 0.3   - prepare command
 
     // Claw pivot positions (mirrored servos)
     private static final double LEFT_CLAW_PIVOT_UP = 0.8;
@@ -61,31 +64,9 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
         // Initialize to starting position
         retractLinkage();
-        //moveIntakeUp();
+        moveIntakeUp();
     }
 
-
-    @Override
-    public void periodic() {
-        // Intake flip positions
-        telemetry.addData("Left Intake Pos", "%.3f", leftIntakeFlip.getPosition());
-        telemetry.addData("Right Intake Pos", "%.3f", rightIntakeFlip.getPosition());
-        telemetry.addData("Target L/R", "UP: %.3f/%.3f, DOWN: %.3f/%.3f",
-                LEFT_INTAKE_UP, RIGHT_INTAKE_UP,
-                LEFT_INTAKE_DOWN, RIGHT_INTAKE_DOWN);
-
-        // Linkage positions
-        telemetry.addData("Left Linkage Pos", "%.3f", leftLinkage.getPosition());
-        telemetry.addData("Right Linkage Pos", "%.3f", rightLinkage.getPosition());
-
-        // Add a line to show current state
-        String state = "";
-        if (isIntakeUp()) state += "Intake UP ";
-        if (isIntakeDown()) state += "Intake DOWN ";
-        if (isLinkageExtended()) state += "Linkage EXTENDED ";
-        if (isLinkageRetracted()) state += "Linkage RETRACTED ";
-        telemetry.addData("State", state);
-    }
 
 
     // Linkage controls
