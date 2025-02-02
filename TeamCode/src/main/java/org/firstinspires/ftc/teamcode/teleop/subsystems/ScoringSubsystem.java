@@ -45,6 +45,7 @@ public class ScoringSubsystem extends SubsystemBase {
         rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //sdfsff
     }
 
     // Manual control methods

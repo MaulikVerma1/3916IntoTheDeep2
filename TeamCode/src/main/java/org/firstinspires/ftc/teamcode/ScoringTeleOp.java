@@ -56,4 +56,4 @@ public class ScoringTeleOp extends CommandOpMode {
         codriver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(() -> scoring.openClawGrip());
     }
-} 
+}
