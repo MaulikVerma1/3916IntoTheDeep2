@@ -43,7 +43,7 @@ public class JustDrive extends CommandOpMode {
         drive.setDefaultCommand(driveCommand);
 
         // Initialize intake arm and color subsystems
-        intakeArm = new IntakeArmSubsystem(hardwareMap, telemetry);
+        intakeArm = new IntakeArmSubsystem(hardwareMap);
         intakeColor = new IntakeColorSubsystem(hardwareMap);
         register(intakeArm);
         register(intakeColor);
