@@ -1,17 +1,19 @@
 package org.firstinspires.ftc.teamcode.teleop.commands;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
-import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeColorSubsystem;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
 
 public class PrepareCollectionCommand extends SequentialCommandGroup {
-    public PrepareCollectionCommand(IntakeArmSubsystem arm, IntakeColorSubsystem intakeColor) {
+    public PrepareCollectionCommand(IntakeArmSubsystem arm) {
         addCommands(
-                new ExtendLinkageCommand(arm),
-                new WaitCommand(500),
-                new MoveIntakeDownCommand(arm)
-                //new CollectPixelCommand(intakeColor)
+                new OpenClawCommand(arm),
+                new WaitCommand(200),
+                new MoveClawUpCommand(arm),
+                new WaitCommand(200),
+                new MoveIntakeDownCommand(arm),
+                new WaitCommand(200),
+                new ExtendLinkageCommand(arm)
         );
     }
 }

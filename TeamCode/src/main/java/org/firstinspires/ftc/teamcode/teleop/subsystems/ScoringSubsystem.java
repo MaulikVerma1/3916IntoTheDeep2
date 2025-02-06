@@ -21,8 +21,10 @@ public class ScoringSubsystem extends SubsystemBase {
     private static final double LEFT_CLAW_PIVOT_DOWN = 0.2;
     private static final double RIGHT_CLAW_PIVOT_UP = 0.2;
     private static final double RIGHT_CLAW_PIVOT_DOWN = 0.8;
-    private static final double CLAW_GRIP_OPEN = 0.4;
+    private static final double CLAW_GRIP_OPEN = 0.8;
     private static final double CLAW_GRIP_CLOSED = 0.0;
+
+
 
     // Slide constants
     private static final double SLIDE_POWER = 1.0;
@@ -45,23 +47,36 @@ public class ScoringSubsystem extends SubsystemBase {
         rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
         //sdfsff
     }
 
     // Manual control methods
     public void setClawPivotPosition(double position) {
-        leftClawPivot.setPosition(position);
-        rightClawPivot.setPosition(1.0 - position); // Mirror the position
+        double leftPos = (position + 1.0) / 2.0;
+        double rightPos = 1.0 - leftPos;  // Mirror for right servo
+
+        leftClawPivot.setPosition(leftPos);
+        rightClawPivot.setPosition(rightPos);
     }
 
+
     public void setSlidePower(double power) {
+        power = -power;
         // Add limits
         if ((power > 0 && leftSlide.getCurrentPosition() > SLIDE_MAX_POSITION) ||
                 (power < 0 && leftSlide.getCurrentPosition() < 0)) {
             power = 0;
         }
         leftSlide.setPower(power);
-        rightSlide.setPower(power);
+        rightSlide.setPower(-power);
     }
 
     public void closeClawGrip() {

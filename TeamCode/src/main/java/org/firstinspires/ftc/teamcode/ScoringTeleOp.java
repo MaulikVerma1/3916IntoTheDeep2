@@ -46,8 +46,8 @@ public class ScoringTeleOp extends CommandOpMode {
             scoring.setSlidePower(slidePower);
 
             // Claw pivot control with left stick Y
-            double pivotPosition = (1 - codriver.getLeftY()) / 2.0;  // Map -1,1 to 0,1
-            scoring.setClawPivotPosition(pivotPosition);
+            //double pivotPosition = (1 - codriver.getLeftY()) / 2.0;  // Map -1,1 to 0,1
+            scoring.setClawPivotPosition(codriver.getLeftY());
         }));
 
         // Claw grip controls

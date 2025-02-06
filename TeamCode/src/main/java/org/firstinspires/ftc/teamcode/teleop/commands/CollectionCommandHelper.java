@@ -1,12 +1,100 @@
 package org.firstinspires.ftc.teamcode.teleop.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
-import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeColorSubsystem;
 
-// All helper commands moved here
+public class CollectionCommandHelper {
+    private final IntakeArmSubsystem arm;
+
+    public CollectionCommandHelper(IntakeArmSubsystem arm) {
+        this.arm = arm;
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+class OpenClawCommand extends CommandBase {
+    private final IntakeArmSubsystem arm;
+
+    public OpenClawCommand(IntakeArmSubsystem arm) {
+        this.arm = arm;
+        addRequirements(arm);
+    }
+
+    @Override
+    public void initialize() {
+        arm.openClaw();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+}
+
+class CloseClawCommand extends CommandBase {
+    private final IntakeArmSubsystem arm;
+
+    public CloseClawCommand(IntakeArmSubsystem arm) {
+        this.arm = arm;
+        addRequirements(arm);
+    }
+
+    @Override
+    public void initialize() {
+        arm.closeClaw();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+}
+
+class MoveClawUpCommand extends CommandBase {
+    private final IntakeArmSubsystem arm;
+
+    public MoveClawUpCommand(IntakeArmSubsystem arm) {
+        this.arm = arm;
+        addRequirements(arm);
+    }
+
+    @Override
+    public void initialize() {
+        arm.moveClawUp();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+}
+
+class MoveClawDownCommand extends CommandBase {
+    private final IntakeArmSubsystem arm;
+
+    public MoveClawDownCommand(IntakeArmSubsystem arm) {
+        this.arm = arm;
+        addRequirements(arm);
+    }
+
+    @Override
+    public void initialize() {
+        arm.moveClawDown();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+}
+
 class ExtendLinkageCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
 
@@ -22,7 +110,7 @@ class ExtendLinkageCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isLinkageExtended();
+        return !arm.isLinkageMoving();
     }
 }
 
@@ -41,7 +129,7 @@ class RetractLinkageCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isLinkageRetracted();
+        return !arm.isLinkageMoving();
     }
 }
 
@@ -60,7 +148,7 @@ class MoveIntakeDownCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isIntakeDown();
+        return true;
     }
 }
 
@@ -79,143 +167,6 @@ class MoveIntakeUpCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return arm.isIntakeUp();
-    }
-}
-
-class MoveClawPivotDownCommand extends CommandBase {
-    private final IntakeArmSubsystem arm;
-
-    public MoveClawPivotDownCommand(IntakeArmSubsystem arm) {
-        this.arm = arm;
-        addRequirements(arm);
-    }
-
-    @Override
-    public void initialize() {
-        arm.moveClawPivotDown();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return arm.isClawPivotDown();
-    }
-}
-
-class MoveClawPivotUpCommand extends CommandBase {
-    private final IntakeArmSubsystem arm;
-
-    public MoveClawPivotUpCommand(IntakeArmSubsystem arm) {
-        this.arm = arm;
-        addRequirements(arm);
-    }
-
-    @Override
-    public void initialize() {
-        arm.moveClawPivotUp();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return !arm.isClawPivotDown();
-    }
-}
-
-class CloseClawGripCommand extends CommandBase {
-    private final IntakeArmSubsystem arm;
-
-    public CloseClawGripCommand(IntakeArmSubsystem arm) {
-        this.arm = arm;
-        addRequirements(arm);
-    }
-
-    @Override
-    public void initialize() {
-        arm.closeClawGrip();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return arm.isClawGripClosed();
-    }
-}
-
-class OpenClawGripCommand extends CommandBase {
-    private final IntakeArmSubsystem arm;
-
-    public OpenClawGripCommand(IntakeArmSubsystem arm) {
-        this.arm = arm;
-        addRequirements(arm);
-    }
-
-    @Override
-    public void initialize() {
-        arm.openClawGrip();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return !arm.isClawGripClosed();
-    }
-}
-
-class WaitForPixelCommand extends CommandBase {
-    private final IntakeColorSubsystem intake;
-    private boolean hasPixel = false;
-
-    public WaitForPixelCommand(IntakeColorSubsystem intake) {
-        this.intake = intake;
-        addRequirements(intake);
-    }
-
-    @Override
-    public void execute() {
-        if (!intake.isYellow()) {
-            hasPixel = true;
-        }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return hasPixel;
-    }
-}
-
-class CollectPixelCommand extends CommandBase {
-    private final IntakeColorSubsystem intake;
-    private boolean hasCheckedColor = false;
-    private static final long CHECK_DELAY_MS = 1000; // Time to wait before checking color
-    private long startTime;
-
-    public CollectPixelCommand(IntakeColorSubsystem intake) {
-        this.intake = intake;
-        addRequirements(intake);
-    }
-
-    @Override
-    public void initialize() {
-        intake.intake();  // Start intake motor
-        startTime = System.currentTimeMillis();
-        hasCheckedColor = false;
-    }
-
-    @Override
-    public void execute() {
-        if (!hasCheckedColor && (System.currentTimeMillis() - startTime) > CHECK_DELAY_MS) {
-//            if (!intake.isYellow()) {
-//                intake.reverse();  // Spit out non-yellow pixel
-//                hasCheckedColor = true;
-//            }
-        }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return hasCheckedColor && (System.currentTimeMillis() - startTime) > (CHECK_DELAY_MS + 500);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        intake.stop();  // Stop the motor
+        return true;
     }
 }
