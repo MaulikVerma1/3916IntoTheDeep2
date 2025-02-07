@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -27,13 +28,21 @@ public class JustDrive extends CommandOpMode {
         // B button - Complete collection (retract + up)
         new GamepadButton(codriver, GamepadKeys.Button.B)
                 .whenPressed(new CompleteCollectionCommand(intakeArm));
+        /*
+        new GamepadButton(codriver, GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(() -> intakeArm.openClaw());
+
+        // Right bumper - Close claw
+        new GamepadButton(codriver, GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(() -> intakeArm.closeClaw());
+        // Register periodic command for joystick control of claw
+        schedule(new RunCommand(() -> {
+            // Use right stick Y for claw control
+            double clawJoystickY = codriver.getLeftY();
+            intakeArm.controlClawWithJoystick(clawJoystickY);
+
+            double slideJoystickY = codriver.getRightY();
+            intakeArm.controlSlidesWithJoystick(slideJoystickY);
+        }));*/
     }
-
-
-
-
-
-
-
-
 }

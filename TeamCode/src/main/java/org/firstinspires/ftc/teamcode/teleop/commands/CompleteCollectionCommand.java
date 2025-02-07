@@ -9,10 +9,10 @@ public class CompleteCollectionCommand extends SequentialCommandGroup {
         addCommands(
                 // First retract linkage and move intake up
                 new RetractLinkageCommand(arm),
-                //new WaitCommand(200),
-                new MoveIntakeUpCommand(arm),
+                //new WaitCommand(500),
+                new MoveIntakeUpCommand(arm)
                 // Then move claw down and grab
-                new MoveClawUpCommand(arm)
+                //new MoveClawUpCommand(arm)
                 //new WaitCommand(200),
                 //new CloseClawCommand(arm)
                 //new WaitCommand(200)

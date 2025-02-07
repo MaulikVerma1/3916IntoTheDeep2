@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -14,6 +15,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx leftClawPivot;
     private final ServoEx rightClawPivot;
     private final ServoEx clawGrip;
+    private final DcMotor leftSlide;
+    private final DcMotor rightSlide;
     //private final Telemetry telemetry;
 
     // Increased tolerance for more reliable state detection
@@ -32,14 +35,17 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_INTAKE_DOWN = 0.7; // More clearance in down position
 
     // Claw pivot positions (adjusted for better grip)
-    private static final double LEFT_CLAW_UP = 0.2;
-    private static final double RIGHT_CLAW_UP = 0.8;
-    private static final double LEFT_CLAW_DOWN = 0.6;
-    private static final double RIGHT_CLAW_DOWN = 0.4;
+    private static final double LEFT_CLAW_UP = 0.8;
+    private static final double RIGHT_CLAW_UP = 0.2;
+    private static final double LEFT_CLAW_DOWN = 0.2;
+    private static final double RIGHT_CLAW_DOWN = 0.8;
 
     // Claw grip positions
     private static final double CLAW_OPEN = 0.6;  // Wider opening
     private static final double CLAW_CLOSED = 0.2; // Gentler grip
+    // Slide constants
+    private static final double SLIDE_POWER = 1.0;
+    private static final int SLIDE_MAX_POSITION = 1000;
 
     public IntakeArmSubsystem(HardwareMap hw) {
 
@@ -53,19 +59,22 @@ public class IntakeArmSubsystem extends SubsystemBase {
         rightClawPivot = new SimpleServo(hw, "pivot.R", -180, 180);
         clawGrip = new SimpleServo(hw, "claw_grip", -180, 180);
 
+        leftSlide = hw.get(DcMotor.class, "slide.L");
+        rightSlide = hw.get(DcMotor.class, "slide.R");
+
+        // Configure slide motors
+        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // Set inversions
         leftIntakeFlip.setInverted(true);
         rightIntakeFlip.setInverted(true);
-        //leftClawPivot.setInverted(true);
-        //rightClawPivot.setInverted(true);
+        leftClawPivot.setInverted(true);
+        rightClawPivot.setInverted(true);
 
-        // Set initial positions
-        //retractLinkage();
-        //moveIntakeUp();
-        //clawGrip.setPosition(CLAW_OPEN);
-        leftClawPivot.turnToAngle(90);
-        rightClawPivot.turnToAngle(90);
-        //moveClawUp();
+
     }
 
 
@@ -147,6 +156,31 @@ public class IntakeArmSubsystem extends SubsystemBase {
     public boolean isClawClosed() {
         //return Math.abs(clawGrip.getPosition() - CLAW_CLOSED) < POSITION_TOLERANCE;
         return true;
+    }
+    public void controlClawWithJoystick(double joystickY) {
+        // Map joystick values (-1 to 1) to servo positions
+        // Only allow downward movement (positive joystick values)
+        joystickY=-joystickY;
+        if (joystickY > 0) {
+            double leftPosition = LEFT_CLAW_UP + (joystickY * (LEFT_CLAW_DOWN - LEFT_CLAW_UP));
+            double rightPosition = RIGHT_CLAW_UP + (joystickY * (RIGHT_CLAW_DOWN - RIGHT_CLAW_UP));
+
+            leftClawPivot.setPosition(leftPosition);
+            rightClawPivot.setPosition(rightPosition);
+        } else {
+            // Return to default position when joystick is released or pushed up
+            leftClawPivot.setPosition(LEFT_CLAW_UP);
+            rightClawPivot.setPosition(RIGHT_CLAW_UP);
+        }
+    }
+    public void controlSlidesWithJoystick(double power) {
+        // Limit movement based on position
+        if ((power > 0 && leftSlide.getCurrentPosition() > SLIDE_MAX_POSITION) ||
+                (power < 0 && leftSlide.getCurrentPosition() < 0)) {
+            power = 0;
+        }
+        leftSlide.setPower(power);
+        rightSlide.setPower(power);
     }
 
 
