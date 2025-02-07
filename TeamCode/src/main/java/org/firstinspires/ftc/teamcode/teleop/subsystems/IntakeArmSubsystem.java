@@ -5,8 +5,6 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.teleop.controller.PIDClawController;
 
 public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx leftLinkage;
@@ -17,7 +15,6 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx rightClawPivot;
     private final ServoEx clawGrip;
     private final Telemetry telemetry;
-    private final PIDClawController clawController;
 
     // Increased tolerance for more reliable state detection
     private static final double POSITION_TOLERANCE = 0.05;
@@ -35,8 +32,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_INTAKE_DOWN = 0.1; // More clearance in down position
 
     // Claw pivot positions (adjusted for better grip)
-    private static final double LEFT_CLAW_UP = 0.9;
-    private static final double RIGHT_CLAW_UP = 0.1;
+    private static final double LEFT_CLAW_UP = 0.8;
+    private static final double RIGHT_CLAW_UP = 0.2;
     private static final double LEFT_CLAW_DOWN = 0.3;
     private static final double RIGHT_CLAW_DOWN = 0.7;
 
@@ -47,9 +44,6 @@ public class IntakeArmSubsystem extends SubsystemBase {
     public IntakeArmSubsystem(HardwareMap hw, Telemetry telemetry) {
         this.telemetry = telemetry;
 
-        telemetry.addData("Status", "Initializing servos...");
-        telemetry.update();
-
         // Initialize servos with proper angle ranges
         leftLinkage = new SimpleServo(hw, "linkage.L", -180, 180);
         rightLinkage = new SimpleServo(hw, "linkage.R", -180, 180);
@@ -59,49 +53,49 @@ public class IntakeArmSubsystem extends SubsystemBase {
         rightClawPivot = new SimpleServo(hw, "pivot.R", 0, 180);
         clawGrip = new SimpleServo(hw, "claw_grip", 0, 180);
 
-        // Initialize PID controller for claw
-        clawController = new PIDClawController(leftClawPivot, rightClawPivot);
-
         // Set inversions
-        leftIntakeFlip.setInverted(true);
-        rightIntakeFlip.setInverted(true);
+        //leftIntakeFlip.setInverted(true);
+        //rightIntakeFlip.setInverted(true);
 
-        // Set initial positions - start in retracted position
+        // Set initial positions
         leftLinkage.setPosition(LEFT_LINKAGE_RETRACTED);
         rightLinkage.setPosition(RIGHT_LINKAGE_RETRACTED);
         leftIntakeFlip.setPosition(LEFT_INTAKE_UP);
         rightIntakeFlip.setPosition(RIGHT_INTAKE_UP);
         clawGrip.setPosition(CLAW_OPEN);
-        clawController.setTargetPosition(LEFT_CLAW_UP);
+        //leftClawPivot.setPosition(LEFT_CLAW_UP);
+        //rightClawPivot.setPosition(RIGHT_CLAW_UP);
     }
 
     @Override
     public void periodic() {
-        // Update PID controller
-        clawController.update();
-
-        // Telemetry for linkage
+        // Detailed telemetry for mechanism status
         telemetry.addLine("=== Mechanism Status ===");
-        telemetry.addData("Linkage", "%s (L:%.2f, R:%.2f)",
-                isLinkageExtended() ? "EXTENDED" : (isLinkageRetracted() ? "RETRACTED" : "MOVING"),
-                leftLinkage.getPosition(),
-                rightLinkage.getPosition());
-        telemetry.addData("Intake", "%s (L:%.2f, R:%.2f)",
-                isIntakeDown() ? "DOWN" : (isIntakeUp() ? "UP" : "MOVING"),
-                leftIntakeFlip.getPosition(),
-                rightIntakeFlip.getPosition());
-        telemetry.addData("Claw", "%s / %s (Target: %.2f)",
-                isClawUp() ? "UP" : "DOWN",
-                isClawClosed() ? "CLOSED" : "OPEN",
-                clawController.getTargetPosition());
+
+        // Linkage status
+        String linkageStatus = isLinkageExtended() ? "EXTENDED" :
+                (isLinkageRetracted() ? "RETRACTED" : "MOVING");
+        telemetry.addData("Linkage", "%s", linkageStatus);
+        telemetry.addData("- Left", "%.2f", leftLinkage.getPosition());
+        telemetry.addData("- Right", "%.2f", rightLinkage.getPosition());
+
+        // Intake status
+        String intakeStatus = isIntakeDown() ? "DOWN" :
+                (isIntakeUp() ? "UP" : "MOVING");
+        telemetry.addData("Intake", "%s", intakeStatus);
+        telemetry.addData("- Left", "%.2f", leftIntakeFlip.getPosition());
+        telemetry.addData("- Right", "%.2f", rightIntakeFlip.getPosition());
+
+        // Claw status
+        String clawHeightStatus = isClawUp() ? "UP" :
+                (isClawDown() ? "DOWN" : "MOVING");
+        String clawGripStatus = isClawClosed() ? "CLOSED" : "OPEN";
+        telemetry.addData("Claw Height", "%s", clawHeightStatus);
+        telemetry.addData("- Left", "%.2f", leftClawPivot.getPosition());
+        telemetry.addData("- Right", "%.2f", rightClawPivot.getPosition());
+        telemetry.addData("Claw Grip", "%s (%.2f)", clawGripStatus, clawGrip.getPosition());
     }
 
-    public boolean isLinkageMoving() {
-        return Math.abs(leftLinkage.getPosition() - LEFT_LINKAGE_EXTENDED) > POSITION_TOLERANCE ||
-                Math.abs(rightLinkage.getPosition() - RIGHT_LINKAGE_EXTENDED) > POSITION_TOLERANCE;
-    }
-
-    // Linkage controls with better error handling
     public void extendLinkage() {
         leftLinkage.setPosition(LEFT_LINKAGE_EXTENDED);
         rightLinkage.setPosition(RIGHT_LINKAGE_EXTENDED);
@@ -122,7 +116,6 @@ public class IntakeArmSubsystem extends SubsystemBase {
                 Math.abs(rightLinkage.getPosition() - RIGHT_LINKAGE_RETRACTED) < POSITION_TOLERANCE;
     }
 
-    // Intake flip controls
     public void moveIntakeDown() {
         leftIntakeFlip.setPosition(LEFT_INTAKE_DOWN);
         rightIntakeFlip.setPosition(RIGHT_INTAKE_DOWN);
@@ -143,7 +136,16 @@ public class IntakeArmSubsystem extends SubsystemBase {
                 Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_UP) < POSITION_TOLERANCE;
     }
 
-    // Claw controls with position feedback
+    public void moveClawUp() {
+        leftClawPivot.setPosition(LEFT_CLAW_UP);
+        rightClawPivot.setPosition(RIGHT_CLAW_UP);
+    }
+
+    public void moveClawDown() {
+        leftClawPivot.setPosition(LEFT_CLAW_DOWN);
+        rightClawPivot.setPosition(RIGHT_CLAW_DOWN);
+    }
+
     public void openClaw() {
         clawGrip.setPosition(CLAW_OPEN);
     }
@@ -152,87 +154,45 @@ public class IntakeArmSubsystem extends SubsystemBase {
         clawGrip.setPosition(CLAW_CLOSED);
     }
 
-    public void moveClawUp() {
-        clawController.setTargetPosition(LEFT_CLAW_UP);
-    }
-
-    public void moveClawDown() {
-        clawController.setTargetPosition(LEFT_CLAW_DOWN);
-    }
-
     public boolean isClawUp() {
-        return Math.abs(clawController.getTargetPosition() - LEFT_CLAW_UP) < POSITION_TOLERANCE;
+        return Math.abs(leftClawPivot.getPosition() - LEFT_CLAW_UP) < POSITION_TOLERANCE &&
+                Math.abs(rightClawPivot.getPosition() - RIGHT_CLAW_UP) < POSITION_TOLERANCE;
     }
 
     public boolean isClawDown() {
-        return Math.abs(clawController.getTargetPosition() - LEFT_CLAW_DOWN) < POSITION_TOLERANCE;
+        return Math.abs(leftClawPivot.getPosition() - LEFT_CLAW_DOWN) < POSITION_TOLERANCE &&
+                Math.abs(rightClawPivot.getPosition() - RIGHT_CLAW_DOWN) < POSITION_TOLERANCE;
     }
 
     public boolean isClawClosed() {
         return Math.abs(clawGrip.getPosition() - CLAW_CLOSED) < POSITION_TOLERANCE;
     }
-
-    // Manual claw adjustment with PID
-    public void adjustClawPosition(double delta) {
-        clawController.adjustTargetPosition(delta * 0.05); // Scale delta for finer control
-    }
-
-    // Claw incremental control
     public void adjustClawGrip(double delta) {
         double currentPos = clawGrip.getPosition();
-        double newPos = clamp(currentPos + (delta * 0.02));
+        double newPos = clamp(currentPos + (delta * 0.02)); // Small increments for fine control
         // Ensure we stay within the defined open/closed range
         newPos = Math.min(CLAW_OPEN, Math.max(CLAW_CLOSED, newPos));
         clawGrip.setPosition(newPos);
-        telemetry.addData("Claw", "Position: %.2f", newPos);
-        telemetry.update();
     }
 
-    public void manualAdjustLinkage(double delta) {
-        // Increased movement speed for manual adjustments
-        delta = delta * 0.1; // 10% adjustment per step for more responsive control
-        double newLeft = clamp(leftLinkage.getPosition() - delta); // Reversed direction
-        double newRight = clamp(rightLinkage.getPosition() + delta); // Reversed direction
-        leftLinkage.setPosition(newLeft);
-        rightLinkage.setPosition(newRight);
+    public void adjustClawHeight(double delta) {
+        double leftCurrentPos = leftClawPivot.getPosition();
+        double rightCurrentPos = rightClawPivot.getPosition();
+
+        // Calculate new positions with small increments for fine control
+        double leftNewPos = clamp(leftCurrentPos + (delta * 0.02));
+        double rightNewPos = clamp(rightCurrentPos - (delta * 0.02)); // Inverted for right servo
+
+        // Ensure we stay within the defined up/down range
+        leftNewPos = Math.min(LEFT_CLAW_UP, Math.max(LEFT_CLAW_DOWN, leftNewPos));
+        rightNewPos = Math.min(RIGHT_CLAW_UP, Math.max(RIGHT_CLAW_DOWN, rightNewPos));
+
+        leftClawPivot.setPosition(leftNewPos);
+        rightClawPivot.setPosition(rightNewPos);
     }
 
-    public void manualAdjustIntake(double delta) {
-        // Simple direct control - move both servos in same direction
-        delta = delta * 0.1; // 10% adjustment per step
-        double newLeft = clamp(leftIntakeFlip.getPosition() - delta);
-        double newRight = clamp(rightIntakeFlip.getPosition() + delta);
-        leftIntakeFlip.setPosition(newLeft);
-        rightIntakeFlip.setPosition(newRight);
-    }
-
-    // Simplified intake position adjustment - removed complex delta logic
-    public void adjustIntakePositions(boolean up, boolean down, boolean left, boolean right) {
-        if (up) {
-            moveIntakeUp();
-        }
-        if (down) {
-            moveIntakeDown();
-        }
-    }
-
-    public void setClawPosition(double position) {
-        // Clamp position between open and closed values
-        double clampedPosition = Math.min(CLAW_OPEN, Math.max(CLAW_CLOSED, position));
-        clawGrip.setPosition(clampedPosition);
-        telemetry.addData("Claw", "Position: %.2f", clampedPosition);
-        telemetry.update();
-    }
 
     private double clamp(double value) {
         return Math.max(0.0, Math.min(1.0, value));
-    }
-
-    // Add helper method for complete retraction sequence
-    public void completeRetraction() {
-        moveIntakeUp();
-        retractLinkage();
-        moveClawDown();
-        closeClaw();
     }
 }

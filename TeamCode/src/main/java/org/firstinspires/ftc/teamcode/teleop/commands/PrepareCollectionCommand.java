@@ -9,7 +9,7 @@ public class PrepareCollectionCommand extends SequentialCommandGroup {
         addCommands(
                 new OpenClawCommand(arm),
                 new WaitCommand(200),
-                new MoveClawUpCommand(arm),
+                //new MoveClawUpCommand(arm),
                 new WaitCommand(200),
                 new MoveIntakeDownCommand(arm),
                 new WaitCommand(200),

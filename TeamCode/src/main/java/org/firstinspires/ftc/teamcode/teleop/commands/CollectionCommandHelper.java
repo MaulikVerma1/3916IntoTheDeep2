@@ -9,18 +9,11 @@ public class CollectionCommandHelper {
     public CollectionCommandHelper(IntakeArmSubsystem arm) {
         this.arm = arm;
     }
-
-    private void sleep(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
 }
 
 class OpenClawCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public OpenClawCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -33,13 +26,22 @@ class OpenClawCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for the claw to fully open before marking as finished
+        if (!arm.isClawClosed()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return isFinished;
     }
 }
 
 class CloseClawCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public CloseClawCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -52,13 +54,22 @@ class CloseClawCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for the claw to fully close before marking as finished
+        if (arm.isClawClosed()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return isFinished;
     }
 }
 
 class MoveClawUpCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public MoveClawUpCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -71,13 +82,22 @@ class MoveClawUpCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for the claw to reach the up position
+        if (arm.isClawUp()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return isFinished;
     }
 }
 
 class MoveClawDownCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public MoveClawDownCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -90,13 +110,22 @@ class MoveClawDownCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for the claw to reach the down position
+        if (arm.isClawDown()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return isFinished;
     }
 }
 
 class ExtendLinkageCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public ExtendLinkageCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -109,13 +138,22 @@ class ExtendLinkageCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for linkage to fully extend
+        if (arm.isLinkageExtended()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return !arm.isLinkageMoving();
+        return isFinished;
     }
 }
 
 class RetractLinkageCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public RetractLinkageCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -128,13 +166,22 @@ class RetractLinkageCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for linkage to fully retract
+        if (arm.isLinkageRetracted()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return !arm.isLinkageMoving();
+        return isFinished;
     }
 }
 
 class MoveIntakeDownCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public MoveIntakeDownCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -147,13 +194,22 @@ class MoveIntakeDownCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for intake to reach down position
+        if (arm.isIntakeDown()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return isFinished;
     }
 }
 
 class MoveIntakeUpCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
+    private boolean isFinished = false;
 
     public MoveIntakeUpCommand(IntakeArmSubsystem arm) {
         this.arm = arm;
@@ -166,7 +222,15 @@ class MoveIntakeUpCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        // Wait for intake to reach up position
+        if (arm.isIntakeUp()) {
+            isFinished = true;
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return isFinished;
     }
 }

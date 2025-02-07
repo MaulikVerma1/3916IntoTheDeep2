@@ -7,13 +7,18 @@ import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
 public class CompleteCollectionCommand extends SequentialCommandGroup {
     public CompleteCollectionCommand(IntakeArmSubsystem arm) {
         addCommands(
-                new MoveClawDownCommand(arm),
-                new WaitCommand(200),
-                new CloseClawCommand(arm),
+                // First retract linkage and move intake up
+                new RetractLinkageCommand(arm),
                 new WaitCommand(200),
                 new MoveIntakeUpCommand(arm),
                 new WaitCommand(200),
-                new RetractLinkageCommand(arm)
+                // Then move claw down and grab
+                //new MoveClawDownCommand(arm),
+                new WaitCommand(200),
+                new CloseClawCommand(arm),
+                new WaitCommand(200)
+                // Finally move claw back up with grip closed
+                //new MoveClawUpCommand(arm)
         );
     }
 }
