@@ -52,40 +52,8 @@ public class JustDrive extends CommandOpMode {
         }
     }
 
-    @Override
-    public void run() {
-        super.run();
-
-        // Update telemetry with control scheme
-        telemetry.addLine("=== Controls ===");
-        telemetry.addData("A Button", "Prepare Collection (Extend + Down)");
-        telemetry.addData("B Button", "Complete Collection (Retract + Up)");
-
-        // Add control input telemetry
-        telemetry.addLine("\n=== Control Inputs ===");
-        telemetry.addData("Right Stick Y", "%.2f", -gamepad2.right_stick_y);
-        telemetry.addData("Right Trigger", "%.2f", gamepad2.right_trigger);
-        telemetry.addData("Left Trigger", "%.2f", gamepad2.left_trigger);
-
-        // Add mechanism state telemetry with actual positions
-        telemetry.addLine("\n=== Mechanism States ===");
-
-        // Linkage telemetry
-        String linkageStatus = intakeArm.isLinkageExtended() ? "EXTENDED" :
-                intakeArm.isLinkageRetracted() ? "RETRACTED" : "MOVING";
-        telemetry.addData("Linkage", "%s", linkageStatus);
-        telemetry.addData("- Left Linkage", "%.3f", intakeArm.getLeftLinkagePosition());
-        telemetry.addData("- Right Linkage", "%.3f", intakeArm.getRightLinkagePosition());
-
-        // Intake telemetry
-        String intakeStatus = intakeArm.isIntakeDown() ? "DOWN" :
-                intakeArm.isIntakeUp() ? "UP" : "MOVING";
-        telemetry.addData("Intake", "%s", intakeStatus);
-        telemetry.addData("- Left Flip", "%.3f", intakeArm.getLeftIntakePosition());
-        telemetry.addData("- Right Flip", "%.3f", intakeArm.getRightIntakePosition());
 
 
 
 
-    }
 }

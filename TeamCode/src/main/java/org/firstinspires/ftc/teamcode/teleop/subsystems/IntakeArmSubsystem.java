@@ -26,10 +26,10 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_LINKAGE_RETRACTED = 0.05; // Not quite full retract to reduce tension
 
     // Intake positions (adjusted for better clearance)
-    private static final double LEFT_INTAKE_UP = 0.9;   // Slightly less than full up
-    private static final double RIGHT_INTAKE_UP = 0.1;  // Slightly less than full up
-    private static final double LEFT_INTAKE_DOWN = 0.05; // More clearance in down position
-    private static final double RIGHT_INTAKE_DOWN = 0.95; // More clearance in down position
+    private static final double LEFT_INTAKE_UP = .8;   // Slightly less than full up
+    private static final double RIGHT_INTAKE_UP = 0.2;  // Slightly less than full up
+    private static final double LEFT_INTAKE_DOWN = 0.0; // More clearance in down position
+    private static final double RIGHT_INTAKE_DOWN = 1.0; // More clearance in down position
 
     // Claw pivot positions (adjusted for better grip)
     private static final double LEFT_CLAW_UP = 0.8;
@@ -117,8 +117,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
 
     public void moveIntakeDown() {
-        leftIntakeFlip.setPosition(1-LEFT_INTAKE_DOWN);
-        rightIntakeFlip.setPosition(1-RIGHT_INTAKE_DOWN);
+        leftIntakeFlip.setPosition(LEFT_INTAKE_DOWN);
+        rightIntakeFlip.setPosition(RIGHT_INTAKE_DOWN);
     }
 
     public void moveIntakeUp() {
@@ -127,13 +127,15 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
 
     public boolean isIntakeDown() {
-        return Math.abs(leftIntakeFlip.getPosition() - LEFT_INTAKE_DOWN) < POSITION_TOLERANCE &&
-                Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_DOWN) < POSITION_TOLERANCE;
+        //return Math.abs(leftIntakeFlip.getPosition() - LEFT_INTAKE_DOWN) < POSITION_TOLERANCE &&
+          //      Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_DOWN) < POSITION_TOLERANCE;
+        return true;
     }
 
     public boolean isIntakeUp() {
-        return Math.abs(leftIntakeFlip.getPosition() - LEFT_INTAKE_UP) < POSITION_TOLERANCE &&
-                Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_UP) < POSITION_TOLERANCE;
+        //return Math.abs(leftIntakeFlip.getPosition() - LEFT_INTAKE_UP) < POSITION_TOLERANCE &&
+           //     Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_UP) < POSITION_TOLERANCE;
+        return true;
     }
 
     public void moveClawUp() {
@@ -197,31 +199,5 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
 
     // Getter methods for servo positions
-    public double getLeftLinkagePosition() {
-        return leftLinkage.getPosition();
-    }
 
-    public double getRightLinkagePosition() {
-        return rightLinkage.getPosition();
-    }
-
-    public double getLeftIntakePosition() {
-        return leftIntakeFlip.getPosition();
-    }
-
-    public double getRightIntakePosition() {
-        return rightIntakeFlip.getPosition();
-    }
-
-    public double getLeftClawPivotPosition() {
-        return leftClawPivot.getPosition();
-    }
-
-    public double getRightClawPivotPosition() {
-        return rightClawPivot.getPosition();
-    }
-
-    public double getClawGripPosition() {
-        return clawGrip.getPosition();
-    }
 }
