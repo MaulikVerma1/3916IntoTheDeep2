@@ -25,17 +25,11 @@ class OpenClawCommand extends CommandBase {
         arm.openClaw();
     }
 
-    @Override
-    public void execute() {
-        // Wait for the claw to fully open before marking as finished
-        if (!arm.isClawClosed()) {
-            isFinished = true;
-        }
-    }
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -53,17 +47,11 @@ class CloseClawCommand extends CommandBase {
         arm.closeClaw();
     }
 
-    @Override
-    public void execute() {
-        // Wait for the claw to fully close before marking as finished
-        if (arm.isClawClosed()) {
-            isFinished = true;
-        }
-    }
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -82,16 +70,8 @@ class MoveClawUpCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        // Wait for the claw to reach the up position
-        if (arm.isClawUp()) {
-            isFinished = true;
-        }
-    }
-
-    @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -109,17 +89,11 @@ class MoveClawDownCommand extends CommandBase {
         arm.moveClawDown();
     }
 
-    @Override
-    public void execute() {
-        // Wait for the claw to reach the down position
-        if (arm.isClawDown()) {
-            isFinished = true;
-        }
-    }
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -137,17 +111,11 @@ class ExtendLinkageCommand extends CommandBase {
         arm.extendLinkage();
     }
 
-    @Override
-    public void execute() {
-        // Wait for linkage to fully extend
-        if (arm.isLinkageExtended()) {
-            isFinished = true;
-        }
-    }
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -165,17 +133,11 @@ class RetractLinkageCommand extends CommandBase {
         arm.retractLinkage();
     }
 
-    @Override
-    public void execute() {
-        // Wait for linkage to fully retract
-        if (arm.isLinkageRetracted()) {
-            isFinished = true;
-        }
-    }
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -193,17 +155,11 @@ class MoveIntakeDownCommand extends CommandBase {
         arm.moveIntakeDown();
     }
 
-    @Override
-    public void execute() {
-        // Wait for intake to reach down position
-        if (arm.isIntakeDown()) {
-            isFinished = true;
-        }
-    }
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }
 
@@ -221,16 +177,11 @@ class MoveIntakeUpCommand extends CommandBase {
         arm.moveIntakeUp();
     }
 
-    @Override
-    public void execute() {
-        // Wait for intake to reach up position
-        if (arm.isIntakeUp()) {
-            isFinished = true;
-        }
-    }
+
+
 
     @Override
     public boolean isFinished() {
-        return isFinished;
+        return true;
     }
 }

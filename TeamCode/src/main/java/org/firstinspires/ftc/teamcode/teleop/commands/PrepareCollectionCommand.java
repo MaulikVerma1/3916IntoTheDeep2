@@ -12,6 +12,7 @@ public class PrepareCollectionCommand extends SequentialCommandGroup {
                 new ExtendLinkageCommand(arm),
                 //new WaitCommand(250),
                 new MoveIntakeDownCommand(arm)
+                //new MoveClawDownCommand(arm)
 
         );
     }

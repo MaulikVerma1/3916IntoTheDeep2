@@ -11,14 +11,14 @@ import org.firstinspires.ftc.teamcode.teleop.subsystems.IntakeArmSubsystem;
 
 @TeleOp(name = "Just Drive")
 public class JustDrive extends CommandOpMode {
-    private GamepadEx driver, codriver;
-    private IntakeArmSubsystem intakeArm;
+    private GamepadEx driver;
+    //used to be private GamepadEx driver, codriver;
 
     @Override
     public void initialize() {
         driver = new GamepadEx(gamepad1);
-        codriver = new GamepadEx(gamepad2);
-        intakeArm = new IntakeArmSubsystem(hardwareMap, telemetry);
+        GamepadEx codriver = new GamepadEx(gamepad2);
+        IntakeArmSubsystem intakeArm = new IntakeArmSubsystem(hardwareMap);
 
         // A button - Prepare for collection (extend + down)
         new GamepadButton(codriver, GamepadKeys.Button.A)
@@ -29,28 +29,8 @@ public class JustDrive extends CommandOpMode {
                 .whenPressed(new CompleteCollectionCommand(intakeArm));
     }
 
-    @Override
-    public void runOpMode() {
-        initialize();
 
-        try {
-            waitForStart();
 
-            while (opModeIsActive()) {
-                run();
-            }
-        } finally {
-            // This will run when the OpMode stops
-            telemetry.addLine("OpMode stopping - Performing hard reset...");
-            telemetry.update();
-
-            // Completely recreate the IntakeArmSubsystem
-            intakeArm = new IntakeArmSubsystem(hardwareMap, telemetry);
-
-            telemetry.addLine("Hard reset complete - IntakeArmSubsystem recreated");
-            telemetry.update();
-        }
-    }
 
 
 
