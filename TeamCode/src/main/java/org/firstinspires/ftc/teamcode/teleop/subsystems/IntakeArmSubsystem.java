@@ -12,11 +12,13 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private final ServoEx rightLinkage;
     private final ServoEx leftIntakeFlip;
     private final ServoEx rightIntakeFlip;
+    private final ServoEx clawRotate;
     private final ServoEx leftClawPivot;
     private final ServoEx rightClawPivot;
     private final ServoEx clawGrip;
     private final DcMotor leftSlide;
     private final DcMotor rightSlide;
+    private final DcMotor intakeMotor;
     //private final Telemetry telemetry;
 
     // Increased tolerance for more reliable state detection
@@ -37,12 +39,15 @@ public class IntakeArmSubsystem extends SubsystemBase {
     // Claw pivot positions (adjusted for better grip)
     private static final double LEFT_CLAW_UP = 0.8;
     private static final double RIGHT_CLAW_UP = 0.2;
-    private static final double LEFT_CLAW_DOWN = 0.2;
-    private static final double RIGHT_CLAW_DOWN = 0.8;
+    private static final double LEFT_CLAW_DOWN = 0.4;
+    private static final double RIGHT_CLAW_DOWN = 0.6;
 
     // Claw grip positions
     private static final double CLAW_OPEN = 0.6;  // Wider opening
-    private static final double CLAW_CLOSED = 0.2; // Gentler grip
+    private static final double CLAW_CLOSED = 0.4; // Gentler grip
+
+    private static final double CLAW_FACE_FRONT = 0.3;
+    private static final double CLAW_FACE_BACK = .5;
     // Slide constants
     private static final double SLIDE_POWER = 1.0;
     private static final int SLIDE_MAX_POSITION = 1000;
@@ -61,6 +66,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
         leftSlide = hw.get(DcMotor.class, "slide.L");
         rightSlide = hw.get(DcMotor.class, "slide.R");
+        intakeMotor = hw.get(DcMotor.class, "intake_motor");
+        clawRotate = new SimpleServo(hw, "claw_rotate", -180, 180);
 
         // Configure slide motors
         //leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -71,8 +78,9 @@ public class IntakeArmSubsystem extends SubsystemBase {
         // Set inversions
         leftIntakeFlip.setInverted(true);
         rightIntakeFlip.setInverted(true);
-       // leftClawPivot.setInverted(true);
-       // rightClawPivot.setInverted(true);
+
+       leftClawPivot.setInverted(true);
+        rightClawPivot.setInverted(true);
 
 
     }
@@ -175,6 +183,16 @@ public class IntakeArmSubsystem extends SubsystemBase {
         }
         leftSlide.setPower(power);
         rightSlide.setPower(power);
+    }
+    public void setIntakePower(double power) {
+        intakeMotor.setPower(power);
+    }
+    public void rotateClawFront() {
+        clawRotate.setPosition(CLAW_FACE_FRONT);
+    }
+
+    public void rotateClawBack() {
+        clawRotate.setPosition(CLAW_FACE_BACK);
     }
 
 
