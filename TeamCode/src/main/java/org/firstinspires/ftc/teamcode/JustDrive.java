@@ -21,6 +21,8 @@ public class JustDrive extends CommandOpMode {
         GamepadEx codriver = new GamepadEx(gamepad2);
         IntakeArmSubsystem intakeArm = new IntakeArmSubsystem(hardwareMap);
 
+        register(intakeArm);
+
         // A button - Prepare for collection (extend + down)
         new GamepadButton(codriver, GamepadKeys.Button.A)
                 .whenPressed(new PrepareCollectionCommand(intakeArm));
@@ -28,21 +30,7 @@ public class JustDrive extends CommandOpMode {
         // B button - Complete collection (retract + up)
         new GamepadButton(codriver, GamepadKeys.Button.B)
                 .whenPressed(new CompleteCollectionCommand(intakeArm));
-        /*
-        new GamepadButton(codriver, GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(() -> intakeArm.openClaw());
 
-        // Right bumper - Close claw
-        new GamepadButton(codriver, GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(() -> intakeArm.closeClaw());
-        // Register periodic command for joystick control of claw
-        schedule(new RunCommand(() -> {
-            // Use right stick Y for claw control
-            double clawJoystickY = codriver.getLeftY();
-            intakeArm.controlClawWithJoystick(clawJoystickY);
 
-            double slideJoystickY = codriver.getRightY();
-            intakeArm.controlSlidesWithJoystick(slideJoystickY);
-        }));*/
     }
 }

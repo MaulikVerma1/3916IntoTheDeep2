@@ -9,7 +9,9 @@ public class CollectionCommandHelper {
     public CollectionCommandHelper(IntakeArmSubsystem arm) {
         this.arm = arm;
     }
+
 }
+
 
 class OpenClawCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
@@ -48,7 +50,6 @@ class CloseClawCommand extends CommandBase {
     }
 
 
-
     @Override
     public boolean isFinished() {
         return true;
@@ -68,6 +69,8 @@ class MoveClawUpCommand extends CommandBase {
     public void initialize() {
         arm.moveClawUp();
     }
+
+
 
     @Override
     public boolean isFinished() {
@@ -90,12 +93,13 @@ class MoveClawDownCommand extends CommandBase {
     }
 
 
-
     @Override
     public boolean isFinished() {
         return true;
     }
 }
+
+
 
 class ExtendLinkageCommand extends CommandBase {
     private final IntakeArmSubsystem arm;
@@ -155,8 +159,6 @@ class MoveIntakeDownCommand extends CommandBase {
         arm.moveIntakeDown();
     }
 
-
-
     @Override
     public boolean isFinished() {
         return true;
@@ -175,8 +177,8 @@ class MoveIntakeUpCommand extends CommandBase {
     @Override
     public void initialize() {
         arm.moveIntakeUp();
+        isFinished=true;
     }
-
 
 
 

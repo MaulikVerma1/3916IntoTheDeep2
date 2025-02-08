@@ -29,8 +29,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     private static final double RIGHT_LINKAGE_RETRACTED = 0.05; // Not quite full retract to reduce tension
 
     // Intake positions (adjusted for better clearance)
-    private static final double LEFT_INTAKE_UP = 0.8;   // Slightly less than full up
-    private static final double RIGHT_INTAKE_UP = 0.2;  // Slightly less than full up
+    private static final double LEFT_INTAKE_UP = 0.9;   // Slightly less than full up
+    private static final double RIGHT_INTAKE_UP = 0.1;  // Slightly less than full up
     private static final double LEFT_INTAKE_DOWN = 0.3; // More clearance in down position
     private static final double RIGHT_INTAKE_DOWN = 0.7; // More clearance in down position
 
@@ -63,16 +63,16 @@ public class IntakeArmSubsystem extends SubsystemBase {
         rightSlide = hw.get(DcMotor.class, "slide.R");
 
         // Configure slide motors
-        leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //leftSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //rightSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Set inversions
         leftIntakeFlip.setInverted(true);
         rightIntakeFlip.setInverted(true);
-        leftClawPivot.setInverted(true);
-        rightClawPivot.setInverted(true);
+       // leftClawPivot.setInverted(true);
+       // rightClawPivot.setInverted(true);
 
 
     }
@@ -90,14 +90,11 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
 
     public boolean isLinkageExtended() {
-        //return Math.abs(leftLinkage.getPosition() - LEFT_LINKAGE_EXTENDED) < POSITION_TOLERANCE &&
-                //Math.abs(rightLinkage.getPosition() - RIGHT_LINKAGE_EXTENDED) < POSITION_TOLERANCE;
         return true;
     }
 
     public boolean isLinkageRetracted() {
-        //return Math.abs(leftLinkage.getPosition() - LEFT_LINKAGE_RETRACTED) < POSITION_TOLERANCE &&
-          //      Math.abs(rightLinkage.getPosition() - RIGHT_LINKAGE_RETRACTED) < POSITION_TOLERANCE;
+
         return true;
     }
 
@@ -112,14 +109,11 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
 
     public boolean isIntakeDown() {
-        //return Math.abs(leftIntakeFlip.getPosition() - LEFT_INTAKE_DOWN) < POSITION_TOLERANCE &&
-          //      Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_DOWN) < POSITION_TOLERANCE;
         return true;
     }
 
     public boolean isIntakeUp() {
-        //return Math.abs(leftIntakeFlip.getPosition() - LEFT_INTAKE_UP) < POSITION_TOLERANCE &&
-           //     Math.abs(rightIntakeFlip.getPosition() - RIGHT_INTAKE_UP) < POSITION_TOLERANCE;
+
         return true;
     }
 
